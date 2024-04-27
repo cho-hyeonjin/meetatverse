@@ -11,7 +11,7 @@ io.listen(3001);
 io.on("connection", (socket) => {
   console.log("user connected");
 
-  socket.emit("Hello~👋🏻");
+  socket.emit("hello");
 
   socket.on("disconnect", () => {
     console.log("user disconnected");
