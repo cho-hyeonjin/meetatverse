@@ -1,13 +1,11 @@
 import { OrbitControls } from "@react-three/drei";
+import { BusinessMan } from "./BusinessMan";
 
 export const Experience = () => {
   return (
     <>
       <OrbitControls />
-      <mesh>
-        <boxGeometry />
-        <meshNormalMaterial />
-      </mesh>
+      <BusinessMan />
     </>
   );
 };
