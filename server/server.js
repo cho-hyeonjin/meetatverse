@@ -41,6 +41,14 @@ io.on("connection", (socket) => {
 
   io.emit("characters", characters); // 연결된 모든 client들에게 'characters'이벤트 발생 - client에서 onCharacters 이벤트가 발생할 때마다 characters 배열에 client측 onCharacters의 value 파라미터에 들어온 새 접속자 정보를 server측 characters 배열에 추가
 
+  socket.on("move", (position) => {
+    const character = characters.find(
+      (character) => character.id === socket.id
+    );
+    character.position = position;
+    io.emit("characters", characters);
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
 
