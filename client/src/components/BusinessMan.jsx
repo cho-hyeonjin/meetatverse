@@ -13,7 +13,7 @@ export function BusinessMan({
   topColor = "#ebebeb",
   tieColor = "#30364C",
   jacketColor = "#191970",
-  bottmColor = "#ffffff",
+  bottomColor = "#ffffff",
   feetColor = "#1E1E24",
   ...props
 }) {
@@ -31,7 +31,7 @@ export function BusinessMan({
 
   useEffect(() => {
     actions[animation].reset().fadeIn(0.5).play();
-    return () => actions[animation].fadeOut(0.5);
+    return () => actions[animation]?.fadeOut(0.5);
   }, [animation]);
 
   return (
@@ -53,7 +53,7 @@ export function BusinessMan({
             rotation={[-Math.PI / 2, 0, 0]}
             scale={100}
           >
-            <meshStandardMaterial color={bottmColor} />
+            <meshStandardMaterial color={bottomColor} />
           </skinnedMesh>
           <skinnedMesh
             name="Suit_Feet"

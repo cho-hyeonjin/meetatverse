@@ -1,9 +1,15 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
+import { useAtom, atom } from "jotai";
 
 export const socket = io("http://localhost:3001");
 
+/** characters 상태관리용 배열 */
+export const charactersAtom = atom([]);
+
 export const SocketManager = () => {
+  const [_characters, setCharacters] = useAtom(charactersAtom);
+
   useEffect(() => {
     function onConnect() {
       console.log("connected");
@@ -18,7 +24,8 @@ export const SocketManager = () => {
     }
 
     function onCharacters(value) {
-      console.log("characters", value);
+      console.log("character: ", value);
+      setCharacters(value);
     }
 
     /** 서버 측에서 emit으로 발생시킨 이벤트 감지, 실행할 콜백 함수 (이벤트 리스너) 등록 */
