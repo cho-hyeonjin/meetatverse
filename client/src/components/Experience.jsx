@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { charactersAtom, socket } from "./SocketManager";
 import { useState } from "react";
 import * as THREE from "three";
+import { Item } from "./Item";
 
 export const Experience = () => {
   const [characters] = useAtom(charactersAtom);
@@ -15,6 +16,11 @@ export const Experience = () => {
       <Environment preset="sunset" />
       <ambientLight intensity={0.3} />
       <OrbitControls />
+
+      <Item name={"Couch"} />
+      <Item name={"StepCubbyStorage"} />
+      <Item name={"WoodTable"} />
+
       <mesh
         rotation-x={-Math.PI / 2}
         position-y={-0.001}
