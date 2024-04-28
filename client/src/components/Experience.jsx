@@ -1,13 +1,14 @@
 import { Environment, OrbitControls, useCursor } from "@react-three/drei";
 import { BusinessMan } from "./BusinessMan";
 import { useAtom } from "jotai";
-import { charactersAtom, socket } from "./SocketManager";
+import { charactersAtom, mapAtom, socket } from "./SocketManager";
 import { useState } from "react";
 import * as THREE from "three";
 import { Item } from "./Item";
 
 export const Experience = () => {
   const [characters] = useAtom(charactersAtom);
+  const [map] = useAtom(mapAtom);
   const [onFloor, setOnFloor] = useState(false);
   useCursor(onFloor);
 
@@ -17,9 +18,12 @@ export const Experience = () => {
       <ambientLight intensity={0.3} />
       <OrbitControls />
 
-      <Item name={"Couch"} />
+      {map.items.map((item, idx) => (
+        <Item key={`${item.name}-${idx}`} item={item} />
+      ))}
+      {/* <Item name={"Couch"} />
       <Item name={"StepCubbyStorage"} />
-      <Item name={"WoodTable"} />
+      <Item name={"WoodTable"} /> */}
 
       <mesh
         rotation-x={-Math.PI / 2}
@@ -27,13 +31,16 @@ export const Experience = () => {
         onClick={(e) => socket.emit("move", [e.point.x, 0, e.point.z])}
         onPointerEnter={() => setOnFloor(true)}
         onPointLeave={() => setOnFloor(false)}
+        position-x={map.size[0] / 2}
+        position-z={map.size[0] / 2}
       >
-        <planeGeometry args={[10, 10]} />
+        <planeGeometry args={map.size} />
         <meshStandardMaterial />
       </mesh>
       {characters.map((character) => (
         <BusinessMan
           key={character.id}
+          id={character.id}
           position={
             new THREE.Vector3(
               character.position[0],

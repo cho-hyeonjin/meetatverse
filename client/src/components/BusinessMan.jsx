@@ -7,6 +7,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
+import { useAtom } from "jotai";
+import { userAtom } from "./SocketManager";
 
 const MOVEMENT_SPEED = 0.032;
 
@@ -17,6 +19,7 @@ export function BusinessMan({
   jacketColor = "#191970",
   bottomColor = "#ffffff",
   feetColor = "#1E1E24",
+  id,
   ...props
 }) {
   const position = useMemo(() => props.position, []);
@@ -34,12 +37,14 @@ export function BusinessMan({
 
   const [animation, setAnimation] = useState("CharacterArmature|Idle");
 
+  const [user] = useAtom(userAtom);
+
   useEffect(() => {
     actions[animation].reset().fadeIn(0.32).play();
     return () => actions[animation]?.fadeOut(0.32);
   }, [animation]);
 
-  useFrame(() => {
+  useFrame((state) => {
     if (group.current.position.distanceTo(props.position) > 0.1) {
       const direction = group.current.position
         .clone()
@@ -52,6 +57,12 @@ export function BusinessMan({
       setAnimation("CharacterArmature|Run"); // 이동 시 애니메이션(액션)을 변경하여 자연스러운 움직임 구현
     } else {
       setAnimation("CharacterArmature|Idle");
+    }
+    if (id === user) {
+      state.camera.position.x = group.current.position.x + 8;
+      state.camera.position.y = group.current.position.y + 8;
+      state.camera.position.z = group.current.position.z + 8;
+      state.camera.lookAt(group.current.position);
     }
   });
 

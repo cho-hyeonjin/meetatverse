@@ -17,6 +17,10 @@ const items = {
     name: "WoodTable",
     size: [3, 6],
   },
+  chair: {
+    name: "Chair",
+    size: [1, 1],
+  },
   couch: {
     name: "Couch",
     size: [3, 3],
@@ -29,12 +33,32 @@ const items = {
 
 /** map dictionary */
 const map = {
-  size: [10, 10],
+  size: [20, 20],
   gridDivision: 2,
   items: [
     {
+      ...items.chair,
+      gridPosition: [12, 11],
+      rotation: 3,
+    },
+    {
+      ...items.chair,
+      gridPosition: [9, 11],
+      rotation: 1, // 1: 90deg, 2: 180deg, ...
+    },
+    {
+      ...items.table,
+      gridPosition: [10, 9],
+      rotation: 2,
+    },
+    {
       ...items.couch,
-      gridPosition: [0, 0],
+      gridPosition: [8, 0],
+    },
+    {
+      ...items.stepCubbyStorage,
+      gridPosition: [-1, 0],
+      rotation: 2,
     },
   ],
 };
