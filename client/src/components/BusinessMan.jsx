@@ -10,9 +10,11 @@ import { SkeletonUtils } from "three-stdlib";
 
 export function BusinessMan({
   hairColor = "#3b3025",
-  topColor = "#ffffff",
+  topColor = "#ebebeb",
+  tieColor = "#30364C",
   jacketColor = "#191970",
   bottmColor = "#ffffff",
+  feetColor = "#1E1E24",
   ...props
 }) {
   const group = useRef();
@@ -60,7 +62,9 @@ export function BusinessMan({
             skeleton={nodes.Suit_Feet.skeleton}
             rotation={[-Math.PI / 2, 0, 0]}
             scale={100}
-          />
+          >
+            <meshStandardMaterial color={feetColor} />
+          </skinnedMesh>
           <group
             name="Suit_Body"
             position={[0, 0.007, 0]}
@@ -88,7 +92,9 @@ export function BusinessMan({
               geometry={nodes.Suit_Body_3.geometry}
               material={materials.Tie}
               skeleton={nodes.Suit_Body_3.skeleton}
-            />
+            >
+              <meshStandardMaterial color={tieColor} />
+            </skinnedMesh>
             <skinnedMesh
               name="Suit_Body_4"
               geometry={nodes.Suit_Body_4.geometry}
