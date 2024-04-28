@@ -5,8 +5,10 @@ Command: npx gltfjsx@6.2.16 public/models/BusinessMan.glb -o src/components/Busi
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
-import { useGraph } from "@react-three/fiber";
+import { useFrame, useGraph } from "@react-three/fiber";
 import { SkeletonUtils } from "three-stdlib";
+
+const MOVEMENT_SPEED = 0.032;
 
 export function BusinessMan({
   hairColor = "#3b3025",
@@ -17,6 +19,8 @@ export function BusinessMan({
   feetColor = "#1E1E24",
   ...props
 }) {
+  const position = useMemo(() => props.position, []);
+
   const group = useRef();
   const { scene, materials, animations } = useGLTF("/models/BusinessMan.glb");
 
@@ -26,16 +30,33 @@ export function BusinessMan({
   const { nodes } = useGraph(clone);
 
   const { actions } = useAnimations(animations, group);
+  // console.log("actions🎬: ", actions);
 
   const [animation, setAnimation] = useState("CharacterArmature|Idle");
 
   useEffect(() => {
-    actions[animation].reset().fadeIn(0.5).play();
-    return () => actions[animation]?.fadeOut(0.5);
+    actions[animation].reset().fadeIn(0.32).play();
+    return () => actions[animation]?.fadeOut(0.32);
   }, [animation]);
 
+  useFrame(() => {
+    if (group.current.position.distanceTo(props.position) > 0.1) {
+      const direction = group.current.position
+        .clone()
+        .sub(props.position)
+        .normalize()
+        .multiplyScalar(MOVEMENT_SPEED);
+
+      group.current.position.sub(direction); // 클릭한 방향으로 텔레포트하는 느낌을 없애고 이동하는 느낌은 구현했으나 아직 너무 linear한 움직임으로 인해 부자연스러움
+      group.current.lookAt(props.position); // 움직이는 방향으로 몸을 회전하게끔 전환해주었지만 여전히 linear한 움직임으로 인해 유령같음
+      setAnimation("CharacterArmature|Run"); // 이동 시 애니메이션(액션)을 변경하여 자연스러운 움직임 구현
+    } else {
+      setAnimation("CharacterArmature|Idle");
+    }
+  });
+
   return (
-    <group ref={group} {...props} dispose={null}>
+    <group ref={group} {...props} position={position} dispose={null}>
       <group name="Root_Scene">
         <group name="RootNode">
           <group

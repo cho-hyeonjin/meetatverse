@@ -3,6 +3,7 @@ import { BusinessMan } from "./BusinessMan";
 import { useAtom } from "jotai";
 import { charactersAtom, socket } from "./SocketManager";
 import { useState } from "react";
+import * as THREE from "three";
 
 export const Experience = () => {
   const [characters] = useAtom(charactersAtom);
@@ -27,7 +28,13 @@ export const Experience = () => {
       {characters.map((character) => (
         <BusinessMan
           key={character.id}
-          position={character.position}
+          position={
+            new THREE.Vector3(
+              character.position[0],
+              character.position[1],
+              character.position[2]
+            )
+          }
           hairColor={character.hairColor}
           topColor={character.topColor}
           tieColor={character.tieColor}
