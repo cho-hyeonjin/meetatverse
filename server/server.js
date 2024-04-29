@@ -457,7 +457,13 @@ console.log(findPath([0, 0], [0, 5]));
 
 /** 랜덤 포지션 생성 함수 - 누군가 접속할 때마다 위치할 포지션을 랜덤으로 부여하기 위함 */
 const generateRandomPosition = () => {
-  return [Math.random() * map.size[0], 0, Math.random() * map.size[1]];
+  for (let i = 0; i < 100; i++) {
+    const x = Math.floor(Math.random() * map.size[0] * map.gridDivision);
+    const y = Math.floor(Math.random() * map.size[1] * map.gridDivision);
+    if (grid.isWalkableAt(x, y)) {
+      return [x, y];
+    }
+  }
 };
 /** 랜덤 hex 컬러 생성 함수 - 누군가 접속할 때마다 캐릭터 모델의 material 색상 조합을 랜덤으로 부여하기 위함 */
 const generateRandomHexColor = () => {
