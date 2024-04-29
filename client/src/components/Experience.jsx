@@ -138,6 +138,16 @@ export const Experience = () => {
     }
   }, [buildMode]);
 
+  useEffect(() => {
+    if (shopMode) {
+      state.camera.position.set(0, 4, 8);
+      controls.current.target.set(0, 0, 0);
+    } else {
+      state.camera.position.set(8, 8, 8);
+      controls.current.target.set(0, 0, 0);
+    }
+  }, [shopMode]);
+
   return (
     <>
       <Environment preset="sunset" />
@@ -161,7 +171,7 @@ export const Experience = () => {
         minPolarAngle={0}
         maxPolarAngle={Math.PI / 2}
         screenSpacePanning={false}
-        enabled={!shopMode}
+        enableZoom={!shopMode}
       />
 
       {shopMode && <Shop />}
