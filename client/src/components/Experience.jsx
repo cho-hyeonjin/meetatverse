@@ -4,7 +4,7 @@ import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import { useEffect, useRef, useState } from "react";
 import { useGrid } from "../hooks/useGrid";
-import { BusinessMan } from "./BusinessMan";
+import { Avatar } from "./Avatar";
 import { Item } from "./Item";
 import { charactersAtom, mapAtom, socket, userAtom } from "./SocketManager";
 import {
@@ -249,7 +249,7 @@ export const Experience = () => {
       )}
       {!buildMode &&
         characters.map((character) => (
-          <BusinessMan
+          <Avatar
             key={character.id}
             id={character.id}
             path={character.path}
