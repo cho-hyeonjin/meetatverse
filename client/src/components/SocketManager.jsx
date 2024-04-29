@@ -30,7 +30,7 @@ export const SocketManager = () => {
     }
 
     function onCharacters(value) {
-      console.log("character: ", value);
+      // console.log("character: ", value);
       setCharacters(value);
     }
 
@@ -46,7 +46,6 @@ export const SocketManager = () => {
       socket.off("disconnect", onDisconnect);
       socket.off("hello", onHello);
       socket.off("characters", onCharacters);
-      console.log("🧹CLEAN UP✨");
     };
   }, []);
 };

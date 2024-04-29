@@ -27,15 +27,15 @@ export const Experience = () => {
 
       <mesh
         rotation-x={-Math.PI / 2}
-        position-y={-0.001}
+        position-y={-0.002}
         onClick={(e) => socket.emit("move", [e.point.x, 0, e.point.z])}
         onPointerEnter={() => setOnFloor(true)}
-        onPointLeave={() => setOnFloor(false)}
+        onPointerLeave={() => setOnFloor(false)}
         position-x={map.size[0] / 2}
-        position-z={map.size[0] / 2}
+        position-z={map.size[1] / 2}
       >
         <planeGeometry args={map.size} />
-        <meshStandardMaterial />
+        <meshStandardMaterial color="#f0f0f0" />
       </mesh>
       {characters.map((character) => (
         <BusinessMan
