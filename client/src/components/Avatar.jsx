@@ -1,3 +1,5 @@
+import { Html, useAnimations, useGLTF } from "@react-three/drei";
+
 import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { useAtom } from "jotai";
@@ -17,14 +19,6 @@ export function Avatar({
   const avatar = useRef();
   const [path, setPath] = useState();
   const { gridToVector3 } = useGrid();
-
-  useEffect(() => {
-    const path = [];
-    props.path?.forEach((gridPosition) => {
-      path.push(gridToVector3(gridPosition));
-    });
-    setPath(path);
-  }, [props.path]);
 
   const group = useRef();
   const { scene } = useGLTF(avatarUrl);
@@ -47,6 +41,7 @@ export function Avatar({
   );
   const [animation, setAnimation] = useState("M_Standing_Idle_001");
   const [isDancing, setIsDancing] = useState(false);
+  const [init, setInit] = useState(false);
 
   useEffect(() => {
     clone.traverse((child) => {
@@ -55,12 +50,16 @@ export function Avatar({
         child.receiveShadow = true;
       }
     });
-  }, []);
+  }, [clone]);
 
   useEffect(() => {
-    actions[animation].reset().fadeIn(0.32).play();
+    actions[animation]
+      .reset()
+      .fadeIn(init ? 0.32 : 0)
+      .play();
+    setInit(true);
     return () => actions[animation]?.fadeOut(0.32);
-  }, [animation]);
+  }, [animation, avatarUrl]);
 
   useEffect(() => {
     function onPlayerDance(value) {
@@ -88,7 +87,7 @@ export function Avatar({
 
   const [user] = useAtom(userAtom);
 
-  useFrame((state) => {
+  useFrame((_state, delta) => {
     const hips = avatar.current.getObjectByName("Hips");
     hips.position.set(0, hips.position.y, 0);
     if (path?.length && group.current.position.distanceTo(path[0]) > 0.1) {
@@ -96,7 +95,7 @@ export function Avatar({
         .clone()
         .sub(path[0])
         .normalize()
-        .multiplyScalar(MOVEMENT_SPEED);
+        .multiplyScalar(MOVEMENT_SPEED * delta);
       group.current.position.sub(direction);
       group.current.lookAt(path[0]);
       setAnimation("M_Walk_001");
@@ -110,12 +109,6 @@ export function Avatar({
         setAnimation("M_Standing_Idle_001");
       }
     }
-    if (id === user) {
-      state.camera.position.x = group.current.position.x + 8;
-      state.camera.position.y = group.current.position.y + 8;
-      state.camera.position.z = group.current.position.z + 8;
-      state.camera.lookAt(group.current.position);
-    }
   });
 
   return (
@@ -126,11 +119,26 @@ export function Avatar({
       dispose={null}
       name={`character-${id}`}
     >
-      <primitive object={clone} ref={avatar} />
+      <Html position-y={2}>
+        <div className="w-60 max-w-full">
+          <p
+            className={`absolute max-w-full text-center break-words -translate-y-full p-2 px-4 -translate-x-1/2 rounded-lg bg-white bg-opacity-40 backdrop-blur-sm text-black transition-opacity duration-500 ${
+              showChatBubble ? "" : "opacity-0"
+            }`}
+          >
+            {chatMessage}
+          </p>
+        </div>
+      </Html>
     </group>
   );
 }
 
+useGLTF.preload(
+  localStorage.getItem("avatarURL") ||
+    "https://models.readyplayer.me/662b9db756fac7283df7ec13.glb"
+);
 useGLTF.preload("/animations/M_Walk_001.glb");
 useGLTF.preload("/animations/M_Standing_Idle_001.glb");
 useGLTF.preload("/animations/M_Dances_001.glb");
+useGLTF.preload("/animations/M_Standing_Expressions_001.glb");
