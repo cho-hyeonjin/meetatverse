@@ -67,7 +67,13 @@ export function BusinessMan({
   });
 
   return (
-    <group ref={group} {...props} position={position} dispose={null}>
+    <group
+      ref={group}
+      {...props}
+      position={position}
+      dispose={null}
+      name={`character-${id}`}
+    >
       <group name="Root_Scene">
         <group name="RootNode">
           <group

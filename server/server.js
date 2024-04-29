@@ -453,7 +453,6 @@ const updateGrid = () => {
 };
 
 updateGrid();
-console.log(findPath([0, 0], [0, 5]));
 
 /** 랜덤 포지션 생성 함수 - 누군가 접속할 때마다 위치할 포지션을 랜덤으로 부여하기 위함 */
 const generateRandomPosition = () => {
@@ -496,11 +495,17 @@ io.on("connection", (socket) => {
 
   io.emit("characters", characters); // 연결된 모든 client들에게 'characters'이벤트 발생 - client에서 onCharacters 이벤트가 발생할 때마다 characters 배열에 client측 onCharacters의 value 파라미터에 들어온 새 접속자 정보를 server측 characters 배열에 추가
 
-  socket.on("move", (position) => {
+  socket.on("move", (from, to) => {
     const character = characters.find(
       (character) => character.id === socket.id
     );
-    character.position = position;
+    const path = findPath(from, to);
+    if (!path) {
+      return;
+    }
+    character.position = from;
+    character.path = path;
+    console.log(path);
     io.emit("characters", characters);
   });
 
