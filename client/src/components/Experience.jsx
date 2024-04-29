@@ -43,6 +43,7 @@ export const Experience = () => {
         if (canDrop) {
           setItems((prev) => {
             const newItems = [...prev];
+            delete newItems[draggedItem].tmp;
             newItems[draggedItem].gridPosition = vector3ToGrid(e.point);
             newItems[draggedItem].rotation = draggedItemRotation;
             return newItems;
@@ -61,7 +62,14 @@ export const Experience = () => {
   const [canDrop, setCanDrop] = useState(false);
 
   useEffect(() => {
-    if (!draggedItem) {
+    if (draggedItem === null) {
+      setItems((prev) => prev.filter((item) => !item.tmp));
+    }
+  }, [draggedItem]);
+
+  useEffect(() => {
+    // 0이 falsy값이여서 예외처리되는 문제로 인해 === null로 변경
+    if (draggedItem === null) {
       return;
     }
     const item = items[draggedItem];
