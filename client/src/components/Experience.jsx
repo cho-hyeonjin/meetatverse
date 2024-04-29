@@ -7,9 +7,9 @@ import { useGrid } from "../hooks/useGrid";
 import { BusinessMan } from "./BusinessMan";
 import { Item } from "./Item";
 import { charactersAtom, mapAtom, socket, userAtom } from "./SocketManager";
-import { draggedItemRotationAtom } from "./UI";
+import { buildModeAtom, draggedItemAtom, draggedItemRotationAtom } from "./UI";
 export const Experience = () => {
-  const [buildMode, setBuildMode] = useState(true);
+  const [buildMode, setBuildMode] = useAtom(buildModeAtom);
 
   const [characters] = useAtom(charactersAtom);
   const [map] = useAtom(mapAtom);
@@ -37,6 +37,7 @@ export const Experience = () => {
         setItems((prev) => {
           const newItems = [...prev];
           newItems[draggedItem].gridPosition = vector3ToGrid(e.point);
+          newItems[draggedItem].rotation = draggedItemRotation;
           return newItems;
         });
       }
@@ -44,7 +45,7 @@ export const Experience = () => {
     }
   };
 
-  const [draggedItem, setDraggedItem] = useState(null);
+  const [draggedItem, setDraggedItem] = useAtom(draggedItemAtom);
   const [draggedItemRotation, setDraggedItemRotation] = useAtom(
     draggedItemRotationAtom
   );
@@ -131,6 +132,7 @@ export const Experience = () => {
           }}
           isDragging={draggedItem === idx}
           dragPosition={dragPosition}
+          dragRotation={draggedItemRotation}
           canDrop={canDrop}
         />
       ))}
