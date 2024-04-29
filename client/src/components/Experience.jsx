@@ -13,6 +13,7 @@ import {
   draggedItemRotationAtom,
   shopModeAtom,
 } from "./UI";
+import { Shop } from "./Shop";
 export const Experience = () => {
   const [buildMode, setBuildMode] = useAtom(buildModeAtom);
   const [shopMode, setShopMode] = useAtom(shopModeAtom);
@@ -161,6 +162,8 @@ export const Experience = () => {
         maxPolarAngle={Math.PI / 2}
         screenSpacePanning={false}
       />
+
+      {shopMode && <Shop />}
 
       {!shopMode &&
         (buildMode ? items : map.items).map((item, idx) => (
