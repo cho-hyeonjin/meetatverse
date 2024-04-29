@@ -503,6 +503,19 @@ io.on("connection", (socket) => {
     io.emit("playerMove", character);
   });
 
+  socket.on("itemsUpdate", (items) => {
+    map.items = items;
+    characters.forEach((character) => {
+      character.path = [];
+      character.position = generateRandomPosition();
+    });
+    updateGrid();
+    io.emit("mapUpdate", {
+      map,
+      characters,
+    });
+  });
+
   socket.on("disconnect", () => {
     console.log("user disconnected");
 
