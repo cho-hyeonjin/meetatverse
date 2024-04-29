@@ -1,6 +1,4 @@
 import { Html, useAnimations, useGLTF } from "@react-three/drei";
-
-import { useAnimations, useGLTF } from "@react-three/drei";
 import { useFrame, useGraph } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import React, { useEffect, useMemo, useRef, useState } from "react";
@@ -8,7 +6,9 @@ import { SkeletonUtils } from "three-stdlib";
 import { useGrid } from "../hooks/useGrid";
 import { socket, userAtom } from "./SocketManager";
 
-const MOVEMENT_SPEED = 0.032;
+import { motion } from "framer-motion-3d";
+
+const MOVEMENT_SPEED = 4;
 
 export function Avatar({
   id,
@@ -130,6 +130,26 @@ export function Avatar({
           </p>
         </div>
       </Html>
+      <motion.group
+        initial={{
+          y: 3,
+          rotateY: Math.PI * 4,
+          scale: 0,
+        }}
+        animate={{
+          y: 0,
+          rotateY: 0,
+          scale: 1,
+        }}
+        transition={{
+          delay: 0.8,
+          mass: 5,
+          stiffness: 200,
+          damping: 42,
+        }}
+      >
+        <primitive object={clone} ref={avatar} />
+      </motion.group>
     </group>
   );
 }

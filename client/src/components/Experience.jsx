@@ -3,7 +3,7 @@ import { CameraControls, Environment, Sky } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useAtom } from "jotai";
 import { useEffect, useRef } from "react";
-// import { Room } from "./Room";
+import { Room } from "./Room";
 import { mapAtom, roomIDAtom, userAtom } from "./SocketManager";
 import { buildModeAtom, shopModeAtom } from "./UI";
 export const Experience = ({ loaded }) => {
@@ -113,7 +113,7 @@ export const Experience = ({ loaded }) => {
         }}
       />
       {roomID && map && <Room />}
-      {loaded && !roomID && <Lobby />}
+      {/* {loaded && !roomID && <Lobby />} */}
     </>
   );
 };
