@@ -57,7 +57,7 @@ export const Experience = () => {
   const [draggedItemRotation, setDraggedItemRotation] = useAtom(
     draggedItemRotationAtom
   );
-  const [dragPosition, setDragPosition] = useState(null);
+  const [dragPosition, setDragPosition] = useState([0, 0]);
   const [canDrop, setCanDrop] = useState(false);
 
   useEffect(() => {
@@ -148,6 +148,21 @@ export const Experience = () => {
     }
   }, [shopMode]);
 
+  const onItemSelected = (item) => {
+    setShopMode(false);
+
+    setItems((prev) => [
+      ...prev,
+      {
+        ...item,
+        gridPosition: [0, 0],
+        tmp: true,
+      },
+    ]);
+    setDraggedItem(items.length);
+    setDraggedItemRotation(0);
+  };
+
   return (
     <>
       <Environment preset="sunset" />
@@ -174,7 +189,7 @@ export const Experience = () => {
         enableZoom={!shopMode}
       />
 
-      {shopMode && <Shop />}
+      {shopMode && <Shop onItemSelected={onItemSelected} />}
 
       {!shopMode &&
         (buildMode ? items : map.items).map((item, idx) => (
