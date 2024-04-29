@@ -32,17 +32,6 @@ export const SocketManager = () => {
       setCharacters(value);
     }
 
-    function onPlayerMove(value) {
-      setCharacters((prev) => {
-        return prev.map((character) => {
-          if (character.id === value.id) {
-            return value;
-          }
-          return character;
-        });
-      });
-    }
-
     function onMapUpdate(value) {
       setMap(value.map);
       setCharacters(value.characters);
@@ -53,7 +42,6 @@ export const SocketManager = () => {
     socket.on("disconnect", onDisconnect);
     socket.on("hello", onHello);
     socket.on("characters", onCharacters);
-    socket.on("playerMove", onPlayerMove);
     socket.on("mapUpdate", onMapUpdate);
 
     /** clean up - 메모리 누수 방지 위해 unmount 시 on으로 등록했던 이벤트 리스너를 off로 제거 (useEffect가 리턴하는 함수는 컴포넌트가 unmount 될 때 실행되니까 이 때 off 해주는 방식으로 클린업) */
@@ -62,7 +50,6 @@ export const SocketManager = () => {
       socket.off("disconnect", onDisconnect);
       socket.off("hello", onHello);
       socket.off("characters", onCharacters);
-      socket.off("playerMove", onPlayerMove);
       socket.on("mapUpdate", onMapUpdate);
     };
   }, []);

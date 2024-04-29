@@ -481,6 +481,7 @@ io.on("connection", (socket) => {
     avatarUrl: "https://models.readyplayer.me/662b9db756fac7283df7ec13.glb",
   });
 
+  /** broadcating hello */
   socket.emit("hello", {
     map,
     characters,
@@ -495,7 +496,7 @@ io.on("connection", (socket) => {
     const character = characters.find(
       (character) => character.id === socket.id
     );
-    character.avatarUrl = avatarUrl;
+    character.avatarUrl = avatarUrl.split("?")[0] + "?" + new Date().getTime();
     io.emit("characters", characters);
   });
 
@@ -509,7 +510,15 @@ io.on("connection", (socket) => {
     }
     character.position = from;
     character.path = path;
+    /** broadcating playerMove */
     io.emit("playerMove", character);
+  });
+
+  socket.on("dance", () => {
+    /** broadcating playerDace */
+    io.emit("playerDance", {
+      id: socket.id,
+    });
   });
 
   socket.on("itemsUpdate", (items) => {
@@ -519,6 +528,7 @@ io.on("connection", (socket) => {
       character.position = generateRandomPosition();
     });
     updateGrid();
+    /** broadcating mapUpdate */
     io.emit("mapUpdate", {
       map,
       characters,
@@ -532,7 +542,6 @@ io.on("connection", (socket) => {
       characters.findIndex((character) => character.id === socket.id),
       1
     );
-    // broadcating characters
     io.emit("characters", characters);
   });
 });

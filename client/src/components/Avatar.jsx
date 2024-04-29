@@ -4,17 +4,11 @@ import { useAtom } from "jotai";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { SkeletonUtils } from "three-stdlib";
 import { useGrid } from "../hooks/useGrid";
-import { userAtom } from "./SocketManager";
+import { socket, userAtom } from "./SocketManager";
 
 const MOVEMENT_SPEED = 0.032;
 
 export function Avatar({
-  hairColor = "#3b3025",
-  topColor = "#ebebeb",
-  tieColor = "#30364C",
-  jacketColor = "#191970",
-  bottomColor = "#ffffff",
-  feetColor = "#1E1E24",
   id,
   avatarUrl = "https://models.readyplayer.me/662b9db756fac7283df7ec13.glb",
   ...props
@@ -40,15 +34,19 @@ export function Avatar({
   const { nodes } = useGraph(clone);
 
   const { animations: walkAnimation } = useGLTF("/animations/M_Walk_001.glb");
+  const { animations: danceAnimation } = useGLTF(
+    "/animations/M_Dances_001.glb"
+  );
   const { animations: idleAnimation } = useGLTF(
     "/animations/M_Standing_Idle_001.glb"
   );
 
   const { actions } = useAnimations(
-    [walkAnimation[0], idleAnimation[0]],
+    [walkAnimation[0], idleAnimation[0], danceAnimation[0]],
     avatar
   );
   const [animation, setAnimation] = useState("M_Standing_Idle_001");
+  const [isDancing, setIsDancing] = useState(false);
 
   useEffect(() => {
     clone.traverse((child) => {
@@ -64,6 +62,30 @@ export function Avatar({
     return () => actions[animation]?.fadeOut(0.32);
   }, [animation]);
 
+  useEffect(() => {
+    function onPlayerDance(value) {
+      if (value.id === id) {
+        setIsDancing(true);
+      }
+    }
+    function onPlayerMove(value) {
+      if (value.id === id) {
+        const path = [];
+        value.path?.forEach((gridPosition) => {
+          path.push(gridToVector3(gridPosition));
+        });
+        setPath(path);
+      }
+    }
+
+    socket.on("playerMove", onPlayerMove);
+    socket.on("playerDance", onPlayerDance);
+    return () => {
+      socket.off("playerDance", onPlayerDance);
+      socket.off("playerMove", onPlayerMove);
+    };
+  }, [id]);
+
   const [user] = useAtom(userAtom);
 
   useFrame((state) => {
@@ -78,10 +100,15 @@ export function Avatar({
       group.current.position.sub(direction);
       group.current.lookAt(path[0]);
       setAnimation("M_Walk_001");
+      setIsDancing(false);
     } else if (path?.length) {
       path.shift();
     } else {
-      setAnimation("M_Standing_Idle_001");
+      if (isDancing) {
+        setAnimation("M_Dances_001");
+      } else {
+        setAnimation("M_Standing_Idle_001");
+      }
     }
     if (id === user) {
       state.camera.position.x = group.current.position.x + 8;
@@ -106,3 +133,4 @@ export function Avatar({
 
 useGLTF.preload("/animations/M_Walk_001.glb");
 useGLTF.preload("/animations/M_Standing_Idle_001.glb");
+useGLTF.preload("/animations/M_Dances_001.glb");
