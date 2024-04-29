@@ -2,7 +2,7 @@ import { Environment, Grid, OrbitControls, useCursor } from "@react-three/drei";
 
 import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGrid } from "../hooks/useGrid";
 import { BusinessMan } from "./BusinessMan";
 import { Item } from "./Item";
@@ -10,10 +10,9 @@ import { charactersAtom, mapAtom, socket, userAtom } from "./SocketManager";
 import { buildModeAtom, draggedItemAtom, draggedItemRotationAtom } from "./UI";
 export const Experience = () => {
   const [buildMode, setBuildMode] = useAtom(buildModeAtom);
-
   const [characters] = useAtom(charactersAtom);
   const [map] = useAtom(mapAtom);
-  const [items, setItems] = useState(map.items); // [name, position, rotation]
+  const [items, setItems] = useState(map.items);
   const [onFloor, setOnFloor] = useState(false);
   useCursor(onFloor);
   const { vector3ToGrid, gridToVector3 } = useGrid();
@@ -34,14 +33,16 @@ export const Experience = () => {
       );
     } else {
       if (draggedItem !== null) {
-        setItems((prev) => {
-          const newItems = [...prev];
-          newItems[draggedItem].gridPosition = vector3ToGrid(e.point);
-          newItems[draggedItem].rotation = draggedItemRotation;
-          return newItems;
-        });
+        if (canDrop) {
+          setItems((prev) => {
+            const newItems = [...prev];
+            newItems[draggedItem].gridPosition = vector3ToGrid(e.point);
+            newItems[draggedItem].rotation = draggedItemRotation;
+            return newItems;
+          });
+        }
+        setDraggedItem(null);
       }
-      setDraggedItem(null);
     }
   };
 
@@ -113,12 +114,31 @@ export const Experience = () => {
 
     setCanDrop(droppable);
   }, [dragPosition, draggedItem, items]);
+  const controls = useRef();
+  const state = useThree((state) => state);
+
+  useEffect(() => {
+    if (buildMode) {
+      setItems(map?.items || []);
+      state.camera.position.set(8, 8, 8);
+      controls.current.target.set(0, 0, 0);
+    } else {
+      socket.emit("itemsUpdate", items);
+    }
+  }, [buildMode]);
 
   return (
     <>
       <Environment preset="sunset" />
       <ambientLight intensity={0.3} />
-      <OrbitControls />
+      <OrbitControls
+        ref={controls}
+        minDistance={5}
+        maxDistance={20}
+        minPolarAngle={0}
+        maxPolarAngle={Math.PI / 2}
+        screenSpacePanning={false}
+      />
 
       {(buildMode ? items : map.items).map((item, idx) => (
         <Item
