@@ -15,6 +15,8 @@ export function Avatar({
   avatarUrl = "https://models.readyplayer.me/662b9db756fac7283df7ec13.glb",
   ...props
 }) {
+  const [chatMessage, setChatMessage] = useState("");
+
   const position = useMemo(() => props.position, []);
   const avatar = useRef();
   const [path, setPath] = useState();
@@ -42,6 +44,8 @@ export function Avatar({
   const [animation, setAnimation] = useState("M_Standing_Idle_001");
   const [isDancing, setIsDancing] = useState(false);
   const [init, setInit] = useState(false);
+
+  const [showChatBubble, setShowChatBubble] = useState(false);
 
   useEffect(() => {
     clone.traverse((child) => {
@@ -77,11 +81,27 @@ export function Avatar({
       }
     }
 
+    let chatMessageBubbleTimeout;
+    function onPlayerChatMessage(value) {
+      if (value.id === id) {
+        setChatMessage(value.message);
+        clearTimeout(chatMessageBubbleTimeout);
+        setShowChatBubble(true);
+        chatMessageBubbleTimeout = setTimeout(() => {
+          setShowChatBubble(false);
+        }, 3500);
+      }
+    }
+
     socket.on("playerMove", onPlayerMove);
     socket.on("playerDance", onPlayerDance);
+
+    socket.on("playerChatMessage", onPlayerChatMessage);
     return () => {
       socket.off("playerDance", onPlayerDance);
       socket.off("playerMove", onPlayerMove);
+
+      socket.off("playerChatMessage", onPlayerChatMessage);
     };
   }, [id]);
 
