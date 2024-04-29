@@ -257,6 +257,7 @@ export const Experience = () => {
             hairColor={character.hairColor}
             topColor={character.topColor}
             bottomColor={character.bottomColor}
+            avatarUrl={character.avatarUrl}
           />
         ))}
     </>

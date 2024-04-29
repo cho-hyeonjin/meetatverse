@@ -58,6 +58,8 @@ export function Avatar({
   const [user] = useAtom(userAtom);
 
   useFrame((state) => {
+    const hips = avatar.current.getObjectByName("Hips");
+    hips.position.set(0, hips.position.y, 0);
     if (path?.length && group.current.position.distanceTo(path[0]) > 0.1) {
       const direction = group.current.position
         .clone()
