@@ -8,6 +8,8 @@ import { BusinessMan } from "./BusinessMan";
 import { Item } from "./Item";
 import { charactersAtom, mapAtom, socket, userAtom } from "./SocketManager";
 export const Experience = () => {
+  const [buildMode, setBuildMode] = useState(true);
+
   const [characters] = useAtom(charactersAtom);
   const [map] = useAtom(mapAtom);
   const [onFloor, setOnFloor] = useState(false);
@@ -29,6 +31,10 @@ export const Experience = () => {
     );
   };
 
+  const [draggedItem, setDraggedItem] = useState(null);
+  const [dragPosition, setDragPosition] = useState(null);
+  // console.log(dragPosition);
+
   return (
     <>
       <Environment preset="sunset" />
@@ -36,7 +42,17 @@ export const Experience = () => {
       <OrbitControls />
 
       {map.items.map((item, idx) => (
-        <Item key={`${item.name}-${idx}`} item={item} />
+        <Item
+          key={`${item.name}-${idx}`}
+          item={item}
+          onClick={() => {
+            if (buildMode) {
+              setDraggedItem((prev) => (prev === null ? idx : prev));
+            }
+          }}
+          isDragging={draggedItem === idx}
+          dragPosition={dragPosition}
+        />
       ))}
       <mesh
         rotation-x={-Math.PI / 2}
@@ -44,6 +60,19 @@ export const Experience = () => {
         onClick={onCharacterMove}
         onPointerEnter={() => setOnFloor(true)}
         onPointerLeave={() => setOnFloor(false)}
+        onPointerMove={(e) => {
+          if (!buildMode) {
+            return;
+          }
+          const newPosition = vector3ToGrid(e.point);
+          if (
+            !dragPosition ||
+            newPosition[0] !== dragPosition[0] ||
+            newPosition[1] !== dragPosition[1]
+          ) {
+            setDragPosition(newPosition);
+          }
+        }}
         position-x={map.size[0] / 2}
         position-z={map.size[1] / 2}
       >

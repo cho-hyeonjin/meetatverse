@@ -3,9 +3,11 @@ import { useAtom } from "jotai";
 import { useMemo } from "react";
 import { SkeletonUtils } from "three-stdlib";
 import { mapAtom } from "./SocketManager";
+import { useGrid } from "../hooks/useGrid";
 
-export const Item = ({ item }) => {
+export const Item = ({ item, onClick, isDragging, dragPosition }) => {
   const { name, gridPosition, size, rotation } = item;
+  const { gridToVector3 } = useGrid();
   const [map] = useAtom(mapAtom);
   const { scene } = useGLTF(`/models/items/${name}.glb`);
   // Skinned meshes cannot be re-used in threejs without cloning them
@@ -15,11 +17,12 @@ export const Item = ({ item }) => {
   return (
     <primitive
       object={clone}
-      position={[
-        width / map.gridDivision / 2 + gridPosition[0] / map.gridDivision,
-        0,
-        height / map.gridDivision / 2 + gridPosition[1] / map.gridDivision,
-      ]}
+      onClick={onClick}
+      position={gridToVector3(
+        isDragging ? dragPosition || gridPosition : gridPosition,
+        width,
+        height
+      )}
       rotation-y={((rotation || 0) * Math.PI) / 2}
     />
   );
