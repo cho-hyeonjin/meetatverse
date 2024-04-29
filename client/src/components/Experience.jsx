@@ -12,6 +12,7 @@ export const Experience = () => {
 
   const [characters] = useAtom(charactersAtom);
   const [map] = useAtom(mapAtom);
+  const [items, setItems] = useState(map.items); // [name, position, rotation]
   const [onFloor, setOnFloor] = useState(false);
   useCursor(onFloor);
   const { vector3ToGrid, gridToVector3 } = useGrid();
@@ -19,16 +20,27 @@ export const Experience = () => {
   const scene = useThree((state) => state.scene);
   const [user] = useAtom(userAtom);
 
-  const onCharacterMove = (e) => {
-    const character = scene.getObjectByName(`character-${user}`);
-    if (!character) {
-      return;
+  const onPlaneClicked = (e) => {
+    if (!buildMode) {
+      const character = scene.getObjectByName(`character-${user}`);
+      if (!character) {
+        return;
+      }
+      socket.emit(
+        "move",
+        vector3ToGrid(character.position),
+        vector3ToGrid(e.point)
+      );
+    } else {
+      if (draggedItem !== null) {
+        setItems((prev) => {
+          const newItems = [...prev];
+          newItems[draggedItem].gridPosition = vector3ToGrid(e.point);
+          return newItems;
+        });
+      }
+      setDraggedItem(null);
     }
-    socket.emit(
-      "move",
-      vector3ToGrid(character.position),
-      vector3ToGrid(e.point)
-    );
   };
 
   const [draggedItem, setDraggedItem] = useState(null);
@@ -41,7 +53,7 @@ export const Experience = () => {
       <ambientLight intensity={0.3} />
       <OrbitControls />
 
-      {map.items.map((item, idx) => (
+      {(buildMode ? items : map.items).map((item, idx) => (
         <Item
           key={`${item.name}-${idx}`}
           item={item}
@@ -57,7 +69,7 @@ export const Experience = () => {
       <mesh
         rotation-x={-Math.PI / 2}
         position-y={-0.002}
-        onClick={onCharacterMove}
+        onClick={onPlaneClicked}
         onPointerEnter={() => setOnFloor(true)}
         onPointerLeave={() => setOnFloor(false)}
         onPointerMove={(e) => {
@@ -80,17 +92,18 @@ export const Experience = () => {
         <meshStandardMaterial color="#f0f0f0" />
       </mesh>
       <Grid infiniteGrid fadeDistance={50} fadeStrength={5} />
-      {characters.map((character) => (
-        <BusinessMan
-          key={character.id}
-          id={character.id}
-          path={character.path}
-          position={gridToVector3(character.position)}
-          hairColor={character.hairColor}
-          topColor={character.topColor}
-          bottomColor={character.bottomColor}
-        />
-      ))}
+      {!buildMode &&
+        characters.map((character) => (
+          <BusinessMan
+            key={character.id}
+            id={character.id}
+            path={character.path}
+            position={gridToVector3(character.position)}
+            hairColor={character.hairColor}
+            topColor={character.topColor}
+            bottomColor={character.bottomColor}
+          />
+        ))}
     </>
   );
 };
