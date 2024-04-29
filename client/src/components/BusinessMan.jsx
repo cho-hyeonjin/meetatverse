@@ -94,6 +94,7 @@ export function BusinessMan({
             skeleton={nodes.Suit_Legs.skeleton}
             rotation={[-Math.PI / 2, 0, 0]}
             scale={100}
+            castShadow
           >
             <meshStandardMaterial color={bottomColor} />
           </skinnedMesh>
@@ -104,6 +105,7 @@ export function BusinessMan({
             skeleton={nodes.Suit_Feet.skeleton}
             rotation={[-Math.PI / 2, 0, 0]}
             scale={100}
+            castShadow
           >
             <meshStandardMaterial color={feetColor} />
           </skinnedMesh>
@@ -118,6 +120,7 @@ export function BusinessMan({
               geometry={nodes.Suit_Body_1.geometry}
               material={materials.Suit}
               skeleton={nodes.Suit_Body_1.skeleton}
+              castShadow
             >
               <meshStandardMaterial color={jacketColor} />
             </skinnedMesh>
@@ -126,6 +129,7 @@ export function BusinessMan({
               geometry={nodes.Suit_Body_2.geometry}
               material={materials.White}
               skeleton={nodes.Suit_Body_2.skeleton}
+              castShadow
             >
               <meshStandardMaterial color={topColor} />
             </skinnedMesh>
@@ -134,6 +138,7 @@ export function BusinessMan({
               geometry={nodes.Suit_Body_3.geometry}
               material={materials.Tie}
               skeleton={nodes.Suit_Body_3.skeleton}
+              castShadow
             >
               <meshStandardMaterial color={tieColor} />
             </skinnedMesh>
@@ -142,6 +147,7 @@ export function BusinessMan({
               geometry={nodes.Suit_Body_4.geometry}
               material={materials.Skin}
               skeleton={nodes.Suit_Body_4.skeleton}
+              castShadow
             />
           </group>
           <group name="Suit_Head" rotation={[-Math.PI / 2, 0, 0]} scale={100}>
@@ -150,12 +156,14 @@ export function BusinessMan({
               geometry={nodes.Suit_Head_1.geometry}
               material={materials.Skin}
               skeleton={nodes.Suit_Head_1.skeleton}
+              castShadow
             />
             <skinnedMesh
               name="Suit_Head_2"
               geometry={nodes.Suit_Head_2.geometry}
               material={materials.Hair}
               skeleton={nodes.Suit_Head_2.skeleton}
+              castShadow
             >
               <meshStandardMaterial color={hairColor} />
             </skinnedMesh>
@@ -164,12 +172,14 @@ export function BusinessMan({
               geometry={nodes.Suit_Head_3.geometry}
               material={materials.Eyebrows}
               skeleton={nodes.Suit_Head_3.skeleton}
+              castShadow
             />
             <skinnedMesh
               name="Suit_Head_4"
               geometry={nodes.Suit_Head_4.geometry}
               material={materials.Eye}
               skeleton={nodes.Suit_Head_4.skeleton}
+              castShadow
             />
           </group>
         </group>
