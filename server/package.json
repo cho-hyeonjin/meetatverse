@@ -1,11 +1,11 @@
 {
-  "name": "sims-server",
+  "name": "meetatverse-server",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js --ignore '*.json'",
+    "start": "NODE_ENV=production node server.js"
   },
   "author": "cho-hyeonjin",
   "license": "ISC",

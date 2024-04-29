@@ -108,7 +108,7 @@ export const UI = () => {
       >
         {avatarMode && (
           <AvatarCreator
-            subdomain="wawa-sensei-tutorial"
+            subdomain="metatverse"
             className="fixed top-0 left-0 z-[999999999] w-full h-full"
             onAvatarExported={(event) => {
               let newAvatarUrl =

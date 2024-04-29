@@ -13,7 +13,8 @@ io.listen(3000);
 
 console.log("Server started on port 3000, allowed cors origin: " + origin);
 
-/** UTIL 함수 - PATH FINDING */
+// PATHFINDING UTILS
+
 const finder = new pathfinding.AStarFinder({
   allowDiagonal: true,
   dontCrossCorners: true,
@@ -26,6 +27,7 @@ const findPath = (room, start, end) => {
 };
 
 const updateGrid = (room) => {
+  // RESET GRID FOR ROOM
   for (let x = 0; x < room.size[0] * room.gridDivision; x++) {
     for (let y = 0; y < room.size[1] * room.gridDivision; y++) {
       room.grid.setWalkableAt(x, y, true);
@@ -52,7 +54,7 @@ const updateGrid = (room) => {
   });
 };
 
-/** ROOMS MANAGEMENT */
+// ROOMS MANAGEMENT
 const rooms = [];
 
 const loadRooms = async () => {
@@ -87,9 +89,10 @@ const loadRooms = async () => {
 
 loadRooms();
 
-/** UTIL 함수 - 랜덤 포지션 생성: 누군가 접속할 때마다 위치할 포지션을 랜덤으로 부여하기 위함 */
+// UTILS
 
 const generateRandomPosition = (room) => {
+  // TO AVOID INFINITE LOOP WE LIMIT TO 100, BEST WOULD BE TO CHECK IF THERE IS ENOUGH SPACE LEFT 🤭
   for (let i = 0; i < 100; i++) {
     const x = Math.floor(Math.random() * room.size[0] * room.gridDivision);
     const y = Math.floor(Math.random() * room.size[1] * room.gridDivision);
@@ -99,7 +102,7 @@ const generateRandomPosition = (room) => {
   }
 };
 
-/** SOCKET MANAGEMENT */
+// SOCKET MANAGEMENT
 
 io.on("connection", (socket) => {
   try {
@@ -240,12 +243,13 @@ io.on("connection", (socket) => {
       }
     });
   } catch (ex) {
-    console.log(ex);
+    console.log(ex); // Big try catch to avoid crashing the server (best would be to handle all errors properly...)
   }
 });
 
-/** MODEL ITEMS DICTIONARY */
+// ROOMS
 
+// SHOP ITEMS
 const items = {
   washer: {
     name: "washer",
