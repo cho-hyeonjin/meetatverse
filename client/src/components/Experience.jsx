@@ -2,7 +2,7 @@ import { Environment, Grid, OrbitControls, useCursor } from "@react-three/drei";
 
 import { useThree } from "@react-three/fiber";
 import { useAtom } from "jotai";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGrid } from "../hooks/useGrid";
 import { BusinessMan } from "./BusinessMan";
 import { Item } from "./Item";
@@ -45,7 +45,69 @@ export const Experience = () => {
 
   const [draggedItem, setDraggedItem] = useState(null);
   const [dragPosition, setDragPosition] = useState(null);
-  // console.log(dragPosition);
+  const [canDrop, setCanDrop] = useState(false);
+
+  useEffect(() => {
+    if (!draggedItem) {
+      return;
+    }
+    const item = items[draggedItem];
+    const width =
+      item.rotation === 1 || item.rotation === 3 ? item.size[1] : item.size[0];
+    const height =
+      item.rotation === 1 || item.rotation === 3 ? item.size[0] : item.size[1];
+
+    let droppable = true;
+
+    // check if item is in bounds
+    if (
+      dragPosition[0] < 0 ||
+      dragPosition[0] + width > map.size[0] * map.gridDivision
+    ) {
+      droppable = false;
+    }
+    if (
+      dragPosition[1] < 0 ||
+      dragPosition[1] + height > map.size[1] * map.gridDivision
+    ) {
+      droppable = false;
+    }
+
+    // check if item is not colliding with other items
+    if (!item.walkable && !item.wall) {
+      items.forEach((otherItem, idx) => {
+        // ignore self
+        if (idx === draggedItem) {
+          return;
+        }
+
+        // ignore wall & floor
+        if (otherItem.walkable || otherItem.wall) {
+          return;
+        }
+
+        // check item overlap
+        const otherWidth =
+          otherItem.rotation === 1 || otherItem.rotation === 3
+            ? otherItem.size[1]
+            : otherItem.size[0];
+        const otherHeight =
+          otherItem.rotation === 1 || otherItem.rotation === 3
+            ? otherItem.size[0]
+            : otherItem.size[1];
+        if (
+          dragPosition[0] < otherItem.gridPosition[0] + otherWidth &&
+          dragPosition[0] + width > otherItem.gridPosition[0] &&
+          dragPosition[1] < otherItem.gridPosition[1] + otherHeight &&
+          dragPosition[1] + height > otherItem.gridPosition[1]
+        ) {
+          droppable = false;
+        }
+      });
+    }
+
+    setCanDrop(droppable);
+  }, [dragPosition, draggedItem, items]);
 
   return (
     <>
@@ -64,6 +126,7 @@ export const Experience = () => {
           }}
           isDragging={draggedItem === idx}
           dragPosition={dragPosition}
+          canDrop={canDrop}
         />
       ))}
       <mesh

@@ -5,7 +5,7 @@ import { SkeletonUtils } from "three-stdlib";
 import { mapAtom } from "./SocketManager";
 import { useGrid } from "../hooks/useGrid";
 
-export const Item = ({ item, onClick, isDragging, dragPosition }) => {
+export const Item = ({ item, onClick, isDragging, dragPosition, canDrop }) => {
   const { name, gridPosition, size, rotation } = item;
   const { gridToVector3 } = useGrid();
   const [map] = useAtom(mapAtom);
@@ -15,15 +15,27 @@ export const Item = ({ item, onClick, isDragging, dragPosition }) => {
   const width = rotation === 1 || rotation === 3 ? size[1] : size[0];
   const height = rotation === 1 || rotation === 3 ? size[0] : size[1];
   return (
-    <primitive
-      object={clone}
+    <group
       onClick={onClick}
       position={gridToVector3(
         isDragging ? dragPosition || gridPosition : gridPosition,
         width,
         height
       )}
-      rotation-y={((rotation || 0) * Math.PI) / 2}
-    />
+    >
+      <primitive object={clone} rotation-y={((rotation || 0) * Math.PI) / 2} />
+      {isDragging && (
+        <mesh>
+          <boxGeometry
+            args={[width / map.gridDivision, 0.2, height / map.gridDivision]}
+          />
+          <meshBasicMaterial
+            color={canDrop ? "#00ff00" : "#ff0000"}
+            opacity={0.3}
+            transparent
+          />
+        </mesh>
+      )}
+    </group>
   );
 };
