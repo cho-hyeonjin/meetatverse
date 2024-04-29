@@ -1,4 +1,5 @@
 import { Server } from "socket.io";
+import pathfinding from "pathfinding";
 
 const io = new Server({
   cors: {
@@ -412,6 +413,47 @@ const map = {
     },
   ],
 };
+
+const grid = new pathfinding.Grid(
+  map.size[0] * map.gridDivision,
+  map.size[1] * map.gridDivision
+);
+
+const finder = new pathfinding.AStarFinder({
+  allowDiagonal: true,
+  dontCrossCorners: true,
+});
+
+const findPath = (start, end) => {
+  const gridClone = grid.clone();
+  const path = finder.findPath(start[0], start[1], end[0], end[1], gridClone);
+  return path;
+};
+
+const updateGrid = () => {
+  map.items.forEach((item) => {
+    if (item.walkable || item.wall) {
+      return;
+    }
+
+    const width =
+      item.rotation === 1 || item.rotation === 3 ? item.size[1] : item.size[0];
+    const height =
+      item.rotation === 1 || item.rotation === 3 ? item.size[0] : item.size[1];
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
+        grid.setWalkableAt(
+          item.gridPosition[0] + x,
+          item.gridPosition[1] + y,
+          false
+        );
+      }
+    }
+  });
+};
+
+updateGrid();
+console.log(findPath([0, 0], [0, 5]));
 
 /** 랜덤 포지션 생성 함수 - 누군가 접속할 때마다 위치할 포지션을 랜덤으로 부여하기 위함 */
 const generateRandomPosition = () => {
