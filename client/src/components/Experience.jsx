@@ -161,6 +161,7 @@ export const Experience = () => {
         minPolarAngle={0}
         maxPolarAngle={Math.PI / 2}
         screenSpacePanning={false}
+        enabled={!shopMode}
       />
 
       {shopMode && <Shop />}
