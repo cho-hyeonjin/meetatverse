@@ -7,6 +7,7 @@ import { useGrid } from "../hooks/useGrid";
 import { BusinessMan } from "./BusinessMan";
 import { Item } from "./Item";
 import { charactersAtom, mapAtom, socket, userAtom } from "./SocketManager";
+import { draggedItemRotationAtom } from "./UI";
 export const Experience = () => {
   const [buildMode, setBuildMode] = useState(true);
 
@@ -44,6 +45,9 @@ export const Experience = () => {
   };
 
   const [draggedItem, setDraggedItem] = useState(null);
+  const [draggedItemRotation, setDraggedItemRotation] = useAtom(
+    draggedItemRotationAtom
+  );
   const [dragPosition, setDragPosition] = useState(null);
   const [canDrop, setCanDrop] = useState(false);
 
@@ -59,7 +63,7 @@ export const Experience = () => {
 
     let droppable = true;
 
-    // check if item is in bounds
+    /** item 이 bounds를 벗어나면 drop이 불가능하도록 */
     if (
       dragPosition[0] < 0 ||
       dragPosition[0] + width > map.size[0] * map.gridDivision
@@ -73,20 +77,20 @@ export const Experience = () => {
       droppable = false;
     }
 
-    // check if item is not colliding with other items
+    /** item이 다른 item과 충돌(겹치는 부분)하는 경우 drop이 불가능하도록 */
     if (!item.walkable && !item.wall) {
       items.forEach((otherItem, idx) => {
-        // ignore self
+        // 자기 자신은 감지하지 않도록 예외처리
         if (idx === draggedItem) {
           return;
         }
 
-        // ignore wall & floor
+        // 벽과 바닥은 감지하지 않도록 예외처리
         if (otherItem.walkable || otherItem.wall) {
           return;
         }
 
-        // check item overlap
+        // 너비&높이 겹침 여부 확인
         const otherWidth =
           otherItem.rotation === 1 || otherItem.rotation === 3
             ? otherItem.size[1]
@@ -122,6 +126,7 @@ export const Experience = () => {
           onClick={() => {
             if (buildMode) {
               setDraggedItem((prev) => (prev === null ? idx : prev));
+              setDraggedItemRotation(item.rotation || 0);
             }
           }}
           isDragging={draggedItem === idx}
