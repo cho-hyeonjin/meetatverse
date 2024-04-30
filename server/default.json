@@ -194,7 +194,7 @@
         "rotation": 0
       },
       {
-        "name": "table",
+        "name": "tableCrossCloth",
         "size": [4, 2],
         "gridPosition": [6, 11],
         "rotation": 0
@@ -430,6 +430,113 @@
         "name": "lampRoundFloor",
         "size": [1, 1],
         "gridPosition": [11, 0],
+        "rotation": 0
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "BATHROOM",
+    "password": "chohyunjin",
+    "items": [
+      {
+        "name": "washer",
+        "size": [2, 2],
+        "gridPosition": [12, 0],
+        "rotation": 0
+      },
+      {
+        "name": "toiletSquare",
+        "size": [2, 2],
+        "gridPosition": [6, 0],
+        "rotation": 0
+      },
+      {
+        "name": "trashcan",
+        "size": [1, 1],
+        "gridPosition": [8, 0],
+        "rotation": 0
+      },
+      {
+        "name": "bathroomCabinetDrawer",
+        "size": [2, 2],
+        "gridPosition": [4, 0],
+        "rotation": 0
+      },
+      {
+        "name": "bathtub",
+        "size": [4, 2],
+        "gridPosition": [6, 7],
+        "rotation": 0
+      },
+      {
+        "name": "bathroomMirror",
+        "size": [2, 1],
+        "wall": true,
+        "gridPosition": [4, 0],
+        "rotation": 0
+      },
+      {
+        "name": "bathroomCabinet",
+        "size": [2, 1],
+        "wall": true,
+        "gridPosition": [12, 0],
+        "rotation": 0
+      },
+      {
+        "name": "bathroomSink",
+        "size": [2, 2],
+        "gridPosition": [0, 7],
+        "rotation": 1
+      },
+      {
+        "name": "toiletSquare",
+        "size": [2, 2],
+        "gridPosition": [0, 9],
+        "rotation": 1
+      },
+      {
+        "name": "bathroomMirror",
+        "size": [2, 1],
+        "wall": true,
+        "gridPosition": [0, 7],
+        "rotation": 1
+      },
+      {
+        "name": "showerRound",
+        "size": [2, 2],
+        "gridPosition": [0, 0],
+        "rotation": 0
+      },
+      {
+        "name": "rugRounded",
+        "size": [6, 4],
+        "walkable": true,
+        "gridPosition": [5, 9],
+        "rotation": 0
+      },
+      {
+        "name": "plant",
+        "size": [1, 1],
+        "gridPosition": [10, 8],
+        "rotation": 0
+      },
+      {
+        "name": "plantSmall",
+        "size": [1, 1],
+        "gridPosition": [0, 11],
+        "rotation": 0
+      },
+      {
+        "name": "bookcaseOpenLow",
+        "size": [2, 1],
+        "gridPosition": [5, 7],
+        "rotation": 1
+      },
+      {
+        "name": "tableCoffeeGlassSquare",
+        "size": [2, 2],
+        "gridPosition": [0, 4],
         "rotation": 0
       }
     ]

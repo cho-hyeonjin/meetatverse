@@ -251,14 +251,6 @@ io.on("connection", (socket) => {
 
 // SHOP ITEMS
 const items = {
-  washer: {
-    name: "washer",
-    size: [2, 2],
-  },
-  trashcan: {
-    name: "trashcan",
-    size: [1, 1],
-  },
   tableCoffee: {
     name: "tableCoffee",
     size: [4, 2],
@@ -338,10 +330,6 @@ const items = {
     name: "cabinetBedDrawerTable",
     size: [1, 1],
     rotation: 2,
-  },
-  table: {
-    name: "table",
-    size: [4, 2],
   },
   tableCrossCloth: {
     name: "tableCrossCloth",
@@ -423,11 +411,6 @@ const items = {
     size: [1, 1],
     rotation: 2,
   },
-  chair: {
-    name: "chair",
-    size: [1, 1],
-    rotation: 2,
-  },
   deskComputer: {
     name: "deskComputer",
     size: [3, 2],
@@ -506,5 +489,47 @@ const items = {
   stoolBarSquare: {
     name: "stoolBarSquare",
     size: [1, 1],
+  },
+  washer: {
+    name: "washer",
+    size: [2, 2],
+  },
+  toiletSquare: {
+    name: "toiletSquare",
+    size: [2, 2],
+  },
+  trashcan: {
+    name: "trashcan",
+    size: [1, 1],
+  },
+  bathroomCabinetDrawer: {
+    name: "bathroomCabinetDrawer",
+    size: [2, 2],
+  },
+  bathtub: {
+    name: "bathtub",
+    size: [4, 2],
+  },
+  bathroomMirror: {
+    name: "bathroomMirror",
+    size: [2, 1],
+    wall: true,
+  },
+  bathroomCabinet: {
+    name: "bathroomCabinet",
+    size: [2, 1],
+    wall: true,
+  },
+  bathroomSink: {
+    name: "bathroomSink",
+    size: [2, 2],
+  },
+  toiletSquare: {
+    name: "toiletSquare",
+    size: [2, 2],
+  },
+  showerRound: {
+    name: "showerRound",
+    size: [2, 2],
   },
 };
