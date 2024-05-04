@@ -58,7 +58,7 @@ https://github.com/cho-hyeonjin/meetatverse/assets/78816754/f24667c4-75fe-4c64-9
 
 ### 채팅 기능
 
-https://github.com/cho-hyeonjin/meetatverse/assets/78816754/1d3fb48d-5f0e-472b-84b0-a21681b762df
+https://github.com/cho-hyeonjin/meetatverse/assets/78816754/f86a0243-576a-4a74-bfeb-eedc4ec2a13a
 
 ### 가상환경에서의 인테리어 협업 기능
 
