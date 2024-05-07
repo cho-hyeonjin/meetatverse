@@ -2,7 +2,7 @@
 
 ### R3F와 Socket.io, jotai, Node.js 를 이용하여 구현한 3D 멀티플레이 웹 서비스
 
-### [MEETATVERS 접속✨ (2인 이상 동시 접속 추천)](https://meetatverse-client-u16512.vm.elestio.app/)
+### [MEETATVERS 접속✨](https://meetatverse-client-u16512.vm.elestio.app/)
 서비스 특성상 2인 이상 동시 접속하여 체험해 보시는 것을 추천드립니다.
 
 
