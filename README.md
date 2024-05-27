@@ -1,10 +1,6 @@
-# [MEETATVERSE](https://meetatverse-client-u16512.vm.elestio.app/)
+# MEETATVERSE
 
 ### R3F와 Socket.io, jotai, Node.js 를 이용하여 구현한 3D 멀티플레이 웹 서비스
-
-### [MEETATVERS 접속✨](https://meetatverse-client-u16512.vm.elestio.app/)
-서비스 특성상 2인 이상 동시 접속하여 체험해 보시는 것을 추천드립니다.
-
 
 ## 💬 프로젝트 소개 
 
@@ -44,7 +40,6 @@ Socket.io를 이용한 양방향 통신으로 여러 명의 유저가 공유하�
 - Ready Player Me SDK를 이용한 커스텀 캐릭터 구성 기능 구현
 
 - **[🔗 Github | meetatverse](https://github.com/cho-hyeonjin/meetatverse)**
-- **[🔗 배포 사이트 | MEETATVERSE](https://meetatverse-client-u16512.vm.elestio.app/)**
 
 <!-- 실시간 양방향 통신으로 채팅 및 실시간 멀티플레이 기능 - 협업 기능으로의 확장 -->
 
